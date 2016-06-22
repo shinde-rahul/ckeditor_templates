@@ -23,11 +23,18 @@ class CkeditorTemplates extends CKEditorPluginBase implements CKEditorPluginConf
   /**
    * {@inheritdoc}
    */
+  public function getFile() {
+    return $this->getTemplatesPluginPath() . 'plugin.js';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getButtons() {
     return [
       'Templates' => [
         'label' => t('Templates'),
-        'image' => base_path() . 'libraries/templates/icons/templates.png',
+        'image' => $this->getTemplatesPluginPath() . 'icons/templates.png',
       ]
     ];
   }
@@ -38,18 +45,16 @@ class CkeditorTemplates extends CKEditorPluginBase implements CKEditorPluginConf
   public function getConfig(Editor $editor) {
     $config = array();
     $settings = $editor->getSettings();
-    if (!isset($settings['plugins']['templates']['replace_content'])) {
-      return $config;
+    if (isset($settings['plugins']['templates']['replace_content'])) {
+      $config['templates_replaceContent'] = $settings['plugins']['templates']['replace_content'];
     }
-    $config['templates_replaceContent'] = $settings['plugins']['templates']['replace_content'];
+    if (isset($settings['plugins']['templates']['template_path'])) {
+      $config['templates_files'] = array($settings['plugins']['templates']['template_path']);
+    }
+    else {
+      $config['templates_files'] = array($this->getTemplatesPluginPath() . 'templates/default.js');
+    }
     return $config;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getFile() {
-    return base_path() . 'libraries/templates/plugin.js';
   }
 
   /**
@@ -57,7 +62,10 @@ class CkeditorTemplates extends CKEditorPluginBase implements CKEditorPluginConf
    */
   public function settingsForm(array $form, FormStateInterface $form_state, Editor $editor) {
     // Defaults.
-    $config = array('replace_content' => false);
+    $config = array(
+      'replace_content' => false,
+      'template_path' => ''
+    );
     $settings = $editor->getSettings();
     if (isset($settings['plugins']['templates'])) {
       $config = $settings['plugins']['templates'];
@@ -70,16 +78,18 @@ class CkeditorTemplates extends CKEditorPluginBase implements CKEditorPluginConf
       '#description' => t('Whether the "Replace actual contents" checkbox is checked by default in the Templates dialog'),
     );
 
+    $form['template_path'] = array(
+      '#title' => t('Template definition file'),
+      '#type' => 'textfield',
+      '#default_value' => $config['template_path'],
+      '#description' => t('Path to the javascript file defining the templates, relative to drupal root (starting with "/")'),
+    );
+
     return $form;
   }
 
-  /**
-   * {@inheritdoc}
-   */
-  function getLibraries(Editor $editor) {
-    return array(
-      'ckeditor_templates/templatesSettings'
-    );
+  private function getTemplatesPluginPath() {
+    return base_path() . 'libraries/templates/';
   }
 
 }
