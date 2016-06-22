@@ -1,0 +1,8 @@
+name: CKEditor Template
+description: Integrates the CKEdito template plugin
+package: CKEditor
+type: module
+version: 1.0
+core: 8.x
+dependencies:
+- ckeditor
