@@ -1,5 +1,5 @@
-name: CKEditor Template
-description: Integrates the CKEdito template plugin
+name: CKEditor Templates
+description: Integrates the CKEdito templates plugin
 package: CKEditor
 type: module
 version: 1.0
