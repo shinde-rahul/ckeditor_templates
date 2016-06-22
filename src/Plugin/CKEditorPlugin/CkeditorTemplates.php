@@ -72,18 +72,18 @@ class CkeditorTemplates extends CKEditorPluginBase implements CKEditorPluginConf
       $config = $settings['plugins']['templates'];
     }
 
-    $form['replace_content'] = array(
-      '#title' => t('Replace content default value'),
-      '#type' => 'checkbox',
-      '#default_value' => $config['replace_content'],
-      '#description' => t('Whether the "Replace actual contents" checkbox is checked by default in the Templates dialog'),
-    );
-
     $form['template_path'] = array(
       '#title' => t('Template definition file'),
       '#type' => 'textfield',
       '#default_value' => $config['template_path'],
       '#description' => t('Path to the javascript file defining the templates, relative to drupal root (starting with "/")'),
+    );
+
+    $form['replace_content'] = array(
+      '#title' => t('Replace content default value'),
+      '#type' => 'checkbox',
+      '#default_value' => $config['replace_content'],
+      '#description' => t('Whether the "Replace actual contents" checkbox is checked by default in the Templates dialog'),
     );
 
     return $form;
