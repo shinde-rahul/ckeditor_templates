@@ -48,13 +48,13 @@ class CkeditorTemplates extends CKEditorPluginBase implements CKEditorPluginConf
     if (isset($settings['plugins']['templates']['replace_content'])) {
       $config['templates_replaceContent'] = $settings['plugins']['templates']['replace_content'];
     }
-    if (isset($settings['plugins']['templates']['template_path']) 
-        && !empty($settings['plugins']['templates']['template_path'])) {
+    if (isset($settings['plugins']['templates']['template_path']) && !empty($settings['plugins']['templates']['template_path'])) {
       $config['templates_files'] = array($settings['plugins']['templates']['template_path']);
     }
     else {
       $config['templates_files'] = $this->getTemplatesDefaultPath();
     }
+    $config['templates_module_path'] = drupal_get_path('module', 'ckeditor_templates');
     return $config;
   }
 
@@ -94,13 +94,13 @@ class CkeditorTemplates extends CKEditorPluginBase implements CKEditorPluginConf
   }
 
   public function getTemplatesDefaultPath() {
-    $defaultPath = $this->getTemplatesPluginPath() . 'templates/default.js';
+    $defaultPath = base_path() . drupal_get_path('module', 'ckeditor_templates') . '/templates/ckeditor_templates.js';
 
     $themeConfiguration = \Drupal::config('system.theme');
     $currentThemeName = $themeConfiguration->get('default');
-    $currentThemeDefaultFileAbsPath = \Drupal::service('file_system')->realpath() . '/' . drupal_get_path('theme', $currentThemeName) . '/templates/default.js';
+    $currentThemeDefaultFileAbsPath = \Drupal::service('file_system')->realpath() . '/' . drupal_get_path('theme', $currentThemeName) . '/templates/ckeditor_templates.js';
     if (file_exists($currentThemeDefaultFileAbsPath)) {
-      $defaultPath = base_path() . drupal_get_path('theme', $currentThemeName) . '/templates/default.js';
+      $defaultPath = base_path() . drupal_get_path('theme', $currentThemeName) . '/templates/ckeditor_templates.js';
     }
 
     return array($defaultPath);
