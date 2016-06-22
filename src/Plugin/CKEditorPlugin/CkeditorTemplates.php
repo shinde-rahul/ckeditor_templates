@@ -8,6 +8,7 @@ use Drupal\ckeditor\CKEditorPluginConfigurableInterface;
 use Drupal\ckeditor\CKEditorPluginContextualInterface;
 use Drupal\Core\Annotation\Translation;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\editor\Entity\Editor;
 
 /**
@@ -18,7 +19,32 @@ use Drupal\editor\Entity\Editor;
  *   label = @Translation("Templates")
  * )
  */
-class CkeditorTemplates extends CKEditorPluginBase implements CKEditorPluginConfigurableInterface {
+class CkeditorTemplates extends CKEditorPluginBase implements CKEditorPluginConfigurableInterface, ContainerFactoryPluginInterface {
+
+  /**
+   *
+   * @var \Drupal\Core\Config\ConfigFactory
+   */
+  private $configFactoryService;
+
+  /**
+   *
+   * @var \Drupal\Core\File\FileSystem 
+   */
+  private $fileSystemService;
+
+  public static function create(\Symfony\Component\DependencyInjection\ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new static(
+        $configuration, $plugin_id, $plugin_definition, $container->get('config.factory'), $container->get('file_system')
+    );
+  }
+
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, $configFactoryService, $fileSystemService) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
+
+    $this->configFactoryService = $configFactoryService;
+    $this->fileSystemService = $fileSystemService;
+  }
 
   /**
    * {@inheritdoc}
@@ -101,10 +127,10 @@ class CkeditorTemplates extends CKEditorPluginBase implements CKEditorPluginConf
     $defaultPath = base_path() . drupal_get_path('module', 'ckeditor_templates') . '/templates/ckeditor_templates.js';
 
     //get site default theme name
-    $themeConfiguration = \Drupal::config('system.theme');
-    $defaultThemeName = $themeConfiguration->get('default');
+    $defaultThemConfig = $this->configFactoryService->get('system.theme');
+    $defaultThemeName = $defaultThemConfig->get('default');
 
-    $defaultThemeFileAbsolutePath = \Drupal::service('file_system')->realpath() . '/' . drupal_get_path('theme', $defaultThemeName) . '/templates/ckeditor_templates.js';
+    $defaultThemeFileAbsolutePath = $this->fileSystemService->realpath() . '/' . drupal_get_path('theme', $defaultThemeName) . '/templates/ckeditor_templates.js';
     if (file_exists($defaultThemeFileAbsolutePath)) {
       $defaultPath = base_path() . drupal_get_path('theme', $defaultThemeName) . '/templates/ckeditor_templates.js';
     }
