@@ -44,4 +44,13 @@ class CkeditorTemplates extends CKEditorPluginBase {
     return base_path() . 'libraries/templates/plugin.js';
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  function getLibraries(Editor $editor) {
+    return array(
+      'ckeditor_templates/templatesSettings'
+    );
+  }
+
 }

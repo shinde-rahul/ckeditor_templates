@@ -1,0 +1,4 @@
+templatesSettings:
+  version: 1.x
+  js:
+    js/templatesSettings.js: {}
