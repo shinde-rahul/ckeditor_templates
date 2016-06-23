@@ -25,13 +25,15 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class CkeditorTemplates extends CKEditorPluginBase implements CKEditorPluginConfigurableInterface, ContainerFactoryPluginInterface {
 
   /**
-   * Configuration Factory Service
+   * Configuration Factory Service.
+   *
    * @var ConfigFactory
    */
   private $configFactoryService;
 
   /**
-   * File System Service
+   * File System Service.
+   *
    * @var FileSystem
    */
   private $fileSystemService;
@@ -46,7 +48,6 @@ class CkeditorTemplates extends CKEditorPluginBase implements CKEditorPluginConf
   }
 
   /**
-   * 
    * Constructs a Drupal\Component\Plugin\PluginBase object.
    *
    * @param array $configuration
@@ -56,11 +57,11 @@ class CkeditorTemplates extends CKEditorPluginBase implements CKEditorPluginConf
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
    * @param ConfigFactory $configFactoryService
-   *   Drupal Configuration Factory Service
+   *   Drupal Configuration Factory Service.
    * @param FileSystem $fileSystemService
-   *   Drupal File System Service
+   *   Drupal File System Service.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, $configFactoryService, $fileSystemService) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactory $configFactoryService, FileSystem $fileSystemService) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->configFactoryService = $configFactoryService;
@@ -113,8 +114,8 @@ class CkeditorTemplates extends CKEditorPluginBase implements CKEditorPluginConf
   public function settingsForm(array $form, FormStateInterface $form_state, Editor $editor) {
     // Defaults.
     $config = array(
-      'replace_content' => false,
-      'template_path' => ''
+      'replace_content' => FALSE,
+      'template_path' => '',
     );
 
     $settings = $editor->getSettings();
@@ -140,10 +141,22 @@ class CkeditorTemplates extends CKEditorPluginBase implements CKEditorPluginConf
     return $form;
   }
 
+  /**
+   * Return ckeditor templates plugin path.
+   *
+   * @return string Path to the ckeditor plugin
+   */
   private function getTemplatesPluginPath() {
     return base_path() . 'libraries/templates/';
   }
 
+  /**
+   * Generate the path to the template file from :
+   * - the default theme if the file exists
+   * - the ckeditor template directory otherwise
+   *
+   * @return array<string> List of path to the template file
+   */
   private function getTemplatesDefaultPath() {
     // Default to module folder.
     $defaultPath = $this->getTemplatesPluginPath() . '/templates/default.js';
