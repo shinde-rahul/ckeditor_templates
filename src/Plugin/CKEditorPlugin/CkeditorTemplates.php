@@ -144,7 +144,7 @@ class CkeditorTemplates extends CKEditorPluginBase implements CKEditorPluginConf
   /**
    * Return ckeditor templates plugin path.
    *
-   * @return string 
+   * @return string
    *   Path to the ckeditor plugin
    */
   private function getTemplatesPluginPath() {
@@ -153,12 +153,12 @@ class CkeditorTemplates extends CKEditorPluginBase implements CKEditorPluginConf
 
   /**
    * Generate the path to the template file.
-   * 
+   *
    * The file will be picked from :
    * - the default theme if the file exists
-   * - the ckeditor template directory otherwise
+   * - the ckeditor template directory otherwise.
    *
-   * @return array<string> 
+   * @return array<string>
    *   List of path to the template file
    */
   private function getTemplatesDefaultPath() {
