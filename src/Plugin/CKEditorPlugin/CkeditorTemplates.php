@@ -7,9 +7,12 @@ use Drupal\ckeditor\CKEditorPluginBase;
 use Drupal\ckeditor\CKEditorPluginConfigurableInterface;
 use Drupal\ckeditor\CKEditorPluginContextualInterface;
 use Drupal\Core\Annotation\Translation;
+use Drupal\Core\Config\ConfigFactory;
+use Drupal\Core\File\FileSystem;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\editor\Entity\Editor;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Defines the "Templates" plugin.
@@ -22,23 +25,41 @@ use Drupal\editor\Entity\Editor;
 class CkeditorTemplates extends CKEditorPluginBase implements CKEditorPluginConfigurableInterface, ContainerFactoryPluginInterface {
 
   /**
-   *
-   * @var \Drupal\Core\Config\ConfigFactory
+   * Configuration Factory Service
+   * @var ConfigFactory
    */
   private $configFactoryService;
 
   /**
-   *
-   * @var \Drupal\Core\File\FileSystem 
+   * File System Service
+   * @var FileSystem
    */
   private $fileSystemService;
 
-  public static function create(\Symfony\Component\DependencyInjection\ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     return new static(
         $configuration, $plugin_id, $plugin_definition, $container->get('config.factory'), $container->get('file_system')
     );
   }
 
+  /**
+   * 
+   * Constructs a Drupal\Component\Plugin\PluginBase object.
+   *
+   * @param array $configuration
+   *   A configuration array containing information about the plugin instance.
+   * @param string $plugin_id
+   *   The plugin_id for the plugin instance.
+   * @param mixed $plugin_definition
+   *   The plugin implementation definition.
+   * @param ConfigFactory $configFactoryService
+   *   Drupal Configuration Factory Service
+   * @param FileSystem $fileSystemService
+   *   Drupal File System Service
+   */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, $configFactoryService, $fileSystemService) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
@@ -62,8 +83,8 @@ class CkeditorTemplates extends CKEditorPluginBase implements CKEditorPluginConf
         'label' => t('Templates'),
         'image' => $this->getTemplatesPluginPath() . 'icons/templates.png',
       ]
-    ]; 
- }
+    ];
+  }
 
   /**
    * {@inheritdoc}
@@ -71,17 +92,17 @@ class CkeditorTemplates extends CKEditorPluginBase implements CKEditorPluginConf
   public function getConfig(Editor $editor) {
     $config = array();
     $settings = $editor->getSettings();
-    //set replace content default value if set
+    // Set replace content default value if set.
     if (isset($settings['plugins']['templates']['replace_content'])) {
       $config['templates_replaceContent'] = $settings['plugins']['templates']['replace_content'];
     }
-    //set template files default value if set
+    // Set template files default value if set.
     if (isset($settings['plugins']['templates']['template_path']) && !empty($settings['plugins']['templates']['template_path'])) {
       $config['templates_files'] = array($settings['plugins']['templates']['template_path']);
     }
     else {
-      //use templates plugin default file
-      $config['templates_files'] = $this->getTemplatesDefaultPath() ;
+      // Use templates plugin default file.
+      $config['templates_files'] = $this->getTemplatesDefaultPath();
     }
     return $config;
   }
@@ -122,12 +143,12 @@ class CkeditorTemplates extends CKEditorPluginBase implements CKEditorPluginConf
   private function getTemplatesPluginPath() {
     return base_path() . 'libraries/templates/';
   }
-  
-  public function getTemplatesDefaultPath() {
-    //default to module folder
+
+  private function getTemplatesDefaultPath() {
+    // Default to module folder.
     $defaultPath = $this->getTemplatesPluginPath() . '/templates/default.js';
 
-    //get site default theme name
+    // Get site default theme name.
     $defaultThemConfig = $this->configFactoryService->get('system.theme');
     $defaultThemeName = $defaultThemConfig->get('default');
 
