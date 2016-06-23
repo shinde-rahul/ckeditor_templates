@@ -83,7 +83,7 @@ class CkeditorTemplates extends CKEditorPluginBase implements CKEditorPluginConf
       'Templates' => [
         'label' => t('Templates'),
         'image' => $this->getTemplatesPluginPath() . 'icons/templates.png',
-      ]
+      ],
     ];
   }
 
@@ -144,18 +144,22 @@ class CkeditorTemplates extends CKEditorPluginBase implements CKEditorPluginConf
   /**
    * Return ckeditor templates plugin path.
    *
-   * @return string Path to the ckeditor plugin
+   * @return string 
+   *   Path to the ckeditor plugin
    */
   private function getTemplatesPluginPath() {
     return base_path() . 'libraries/templates/';
   }
 
   /**
-   * Generate the path to the template file from :
+   * Generate the path to the template file.
+   * 
+   * The file will be picked from :
    * - the default theme if the file exists
    * - the ckeditor template directory otherwise
    *
-   * @return array<string> List of path to the template file
+   * @return array<string> 
+   *   List of path to the template file
    */
   private function getTemplatesDefaultPath() {
     // Default to module folder.
