@@ -24,9 +24,8 @@ Go to the format and editor config page and click configure on the format your
 want to edit : 
 http://drupalvm.dev/admin/config/content/formats
 - Add the templates button to the toolbar
-- By default, the templates are retrieved from this module from the file 
-templates/ckeditor_templates.js
-- copy this file to your theme template folder and customize it
+- copy the file ckeditor_templates.js.example to your theme template folder, 
+rename it without .example and customize it :
     x edit the image_path variable to link to you thumbnail folder
     x change the templates to you will be editing the templates array
 

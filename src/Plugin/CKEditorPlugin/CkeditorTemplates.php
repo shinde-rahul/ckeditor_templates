@@ -62,8 +62,8 @@ class CkeditorTemplates extends CKEditorPluginBase implements CKEditorPluginConf
         'label' => t('Templates'),
         'image' => $this->getTemplatesPluginPath() . 'icons/templates.png',
       ]
-    ];
-  }
+    ]; 
+ }
 
   /**
    * {@inheritdoc}
@@ -71,17 +71,18 @@ class CkeditorTemplates extends CKEditorPluginBase implements CKEditorPluginConf
   public function getConfig(Editor $editor) {
     $config = array();
     $settings = $editor->getSettings();
+    //set replace content default value if set
     if (isset($settings['plugins']['templates']['replace_content'])) {
       $config['templates_replaceContent'] = $settings['plugins']['templates']['replace_content'];
     }
+    //set template files default value if set
     if (isset($settings['plugins']['templates']['template_path']) && !empty($settings['plugins']['templates']['template_path'])) {
       $config['templates_files'] = array($settings['plugins']['templates']['template_path']);
     }
     else {
-      $config['templates_files'] = $this->getTemplatesDefaultPath();
+      //use templates plugin default file
+      $config['templates_files'] = $this->getTemplatesDefaultPath() ;
     }
-    //this gives access to the module path in the ckeditor_templates.js file
-    $config['templates_module_path'] = drupal_get_path('module', 'ckeditor_templates');
     return $config;
   }
 
@@ -121,10 +122,10 @@ class CkeditorTemplates extends CKEditorPluginBase implements CKEditorPluginConf
   private function getTemplatesPluginPath() {
     return base_path() . 'libraries/templates/';
   }
-
+  
   public function getTemplatesDefaultPath() {
     //default to module folder
-    $defaultPath = base_path() . drupal_get_path('module', 'ckeditor_templates') . '/templates/ckeditor_templates.js';
+    $defaultPath = $this->getTemplatesPluginPath() . '/templates/default.js';
 
     //get site default theme name
     $defaultThemConfig = $this->configFactoryService->get('system.theme');
