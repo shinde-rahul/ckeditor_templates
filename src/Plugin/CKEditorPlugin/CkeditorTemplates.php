@@ -105,7 +105,7 @@ class CkeditorTemplates extends CKEditorPluginBase implements CKEditorPluginConf
       '#title' => t('Template definition file'),
       '#type' => 'textfield',
       '#default_value' => $config['template_path'],
-      '#description' => t('Path to the javascript file defining the templates, relative to drupal root (starting with "/")'),
+      '#description' => t('Path to the javascript file defining the templates, relative to drupal root (starting with "/"). By default, it looks in your default theme directory for a file named "templates/ckeditor_templates.js"'),
     );
 
     $form['replace_content'] = array(
