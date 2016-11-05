@@ -8,7 +8,6 @@ use Drupal\ckeditor\CKEditorPluginConfigurableInterface;
 use Drupal\ckeditor\CKEditorPluginContextualInterface;
 use Drupal\Core\Annotation\Translation;
 use Drupal\Core\Config\ConfigFactory;
-use Drupal\Core\File\FileSystem;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\editor\Entity\Editor;
@@ -32,18 +31,11 @@ class CkeditorTemplates extends CKEditorPluginBase implements CKEditorPluginConf
   private $configFactoryService;
 
   /**
-   * File System Service.
-   *
-   * @var FileSystem
-   */
-  private $fileSystemService;
-
-  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     return new static(
-        $configuration, $plugin_id, $plugin_definition, $container->get('config.factory'), $container->get('file_system')
+        $configuration, $plugin_id, $plugin_definition, $container->get('config.factory')
     );
   }
 
@@ -58,21 +50,18 @@ class CkeditorTemplates extends CKEditorPluginBase implements CKEditorPluginConf
    *   The plugin implementation definition.
    * @param ConfigFactory $configFactoryService
    *   Drupal Configuration Factory Service.
-   * @param FileSystem $fileSystemService
-   *   Drupal File System Service.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactory $configFactoryService, FileSystem $fileSystemService) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactory $configFactoryService) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->configFactoryService = $configFactoryService;
-    $this->fileSystemService = $fileSystemService;
   }
 
   /**
    * {@inheritdoc}
    */
   public function getFile() {
-    return $this->getTemplatesPluginPath() . 'plugin.js';
+    return $this->getTemplatesPluginPath() . '/plugin.js';
   }
 
   /**
@@ -82,7 +71,7 @@ class CkeditorTemplates extends CKEditorPluginBase implements CKEditorPluginConf
     return [
       'Templates' => [
         'label' => t('Templates'),
-        'image' => $this->getTemplatesPluginPath() . 'icons/templates.png',
+        'image' => $this->getTemplatesPluginPath() . '/icons/templates.png',
       ],
     ];
   }
@@ -142,13 +131,13 @@ class CkeditorTemplates extends CKEditorPluginBase implements CKEditorPluginConf
   }
 
   /**
-   * Return ckeditor templates plugin path.
+   * Return ckeditor templates plugin path relative to drupal root.
    *
    * @return string
-   *   Path to the ckeditor plugin
+   *   Relative path to the ckeditor plugin folder
    */
   private function getTemplatesPluginPath() {
-    return base_path() . 'libraries/templates/';
+    return 'libraries/templates';
   }
 
   /**
@@ -163,15 +152,15 @@ class CkeditorTemplates extends CKEditorPluginBase implements CKEditorPluginConf
    */
   private function getTemplatesDefaultPath() {
     // Default to module folder.
-    $defaultPath = $this->getTemplatesPluginPath() . '/templates/default.js';
+    $defaultPath = '/' . $this->getTemplatesPluginPath() . '/templates/default.js';
 
     // Get site default theme name.
     $defaultThemConfig = $this->configFactoryService->get('system.theme');
     $defaultThemeName = $defaultThemConfig->get('default');
 
-    $defaultThemeFileAbsolutePath = $this->fileSystemService->realpath() . '/' . drupal_get_path('theme', $defaultThemeName) . '/templates/ckeditor_templates.js';
+    $defaultThemeFileAbsolutePath = DRUPAL_ROOT . '/' . drupal_get_path('theme', $defaultThemeName) . '/templates/ckeditor_templates.js';
     if (file_exists($defaultThemeFileAbsolutePath)) {
-      $defaultPath = base_path() . drupal_get_path('theme', $defaultThemeName) . '/templates/ckeditor_templates.js';
+      $defaultPath = '/' . drupal_get_path('theme', $defaultThemeName) . '/templates/ckeditor_templates.js';
     }
 
     return array($defaultPath);
