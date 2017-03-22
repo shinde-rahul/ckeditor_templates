@@ -35,7 +35,7 @@ class CkeditorTemplates extends CKEditorPluginBase implements CKEditorPluginConf
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     return new static(
-        $configuration, $plugin_id, $plugin_definition, $container->get('config.factory')
+      $configuration, $plugin_id, $plugin_definition, $container->get('config.factory')
     );
   }
 
@@ -62,6 +62,13 @@ class CkeditorTemplates extends CKEditorPluginBase implements CKEditorPluginConf
    */
   public function getFile() {
     return $this->getTemplatesPluginPath() . '/plugin.js';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getLibraries(Editor $editor) {
+    return ['ckeditor_templates/ckeditor.templates.dialog'];
   }
 
   /**
