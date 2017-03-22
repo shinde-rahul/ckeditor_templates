@@ -5,7 +5,7 @@
 
 (function ($, Drupal, drupalSettings) {
 
-  "use strict";
+  'use strict';
 
   /**
    * Provides the summary for the "templates" plugin settings vertical tab.
@@ -19,7 +19,7 @@
     attach: function () {
       $('[data-ckeditor-plugin-id="templates"]').drupalSetSummary(function (context) {
         var templatePathValue = $('input[name="editor[settings][plugins][templates][template_path]').val();
-        var replaceContentValue = $('input[name="editor[settings][plugins][templates][replace_content]').is(":checked");
+        var replaceContentValue = $('input[name="editor[settings][plugins][templates][replace_content]').is(':checked');
 
         var templatePathOutput = templatePathValue ? 'Default or theme template file.' : 'Template file overridden.';
         var replaceContentOutput = replaceContentValue ? '"Replace content" checked' : '"Replace content" unchecked';
