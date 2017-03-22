@@ -2,11 +2,8 @@
 
 namespace Drupal\ckeditor_templates\Plugin\CKEditorPlugin;
 
-use Drupal\ckeditor\Annotation\CKEditorPlugin;
 use Drupal\ckeditor\CKEditorPluginBase;
 use Drupal\ckeditor\CKEditorPluginConfigurableInterface;
-use Drupal\ckeditor\CKEditorPluginContextualInterface;
-use Drupal\Core\Annotation\Translation;
 use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -26,7 +23,7 @@ class CkeditorTemplates extends CKEditorPluginBase implements CKEditorPluginConf
   /**
    * Configuration Factory Service.
    *
-   * @var ConfigFactory
+   * @var \Drupal\Core\Config\ConfigFactory
    */
   private $configFactoryService;
 
@@ -48,7 +45,7 @@ class CkeditorTemplates extends CKEditorPluginBase implements CKEditorPluginConf
    *   The plugin_id for the plugin instance.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
-   * @param ConfigFactory $configFactoryService
+   * @param \Drupal\Core\Config\ConfigFactory $configFactoryService
    *   Drupal Configuration Factory Service.
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactory $configFactoryService) {
@@ -87,7 +84,7 @@ class CkeditorTemplates extends CKEditorPluginBase implements CKEditorPluginConf
    * {@inheritdoc}
    */
   public function getConfig(Editor $editor) {
-    $config = array();
+    $config = [];
     $settings = $editor->getSettings();
     // Set replace content default value if set.
     if (isset($settings['plugins']['templates']['replace_content'])) {
@@ -95,7 +92,7 @@ class CkeditorTemplates extends CKEditorPluginBase implements CKEditorPluginConf
     }
     // Set template files default value if set.
     if (isset($settings['plugins']['templates']['template_path']) && !empty($settings['plugins']['templates']['template_path'])) {
-      $config['templates_files'] = array($settings['plugins']['templates']['template_path']);
+      $config['templates_files'] = [$settings['plugins']['templates']['template_path']];
     }
     else {
       // Use templates plugin default file.
@@ -109,10 +106,10 @@ class CkeditorTemplates extends CKEditorPluginBase implements CKEditorPluginConf
    */
   public function settingsForm(array $form, FormStateInterface $form_state, Editor $editor) {
     // Defaults.
-    $config = array(
+    $config = [
       'replace_content' => FALSE,
       'template_path' => '',
-    );
+    ];
 
     $settings = $editor->getSettings();
 
@@ -120,19 +117,19 @@ class CkeditorTemplates extends CKEditorPluginBase implements CKEditorPluginConf
       $config = $settings['plugins']['templates'];
     }
 
-    $form['template_path'] = array(
+    $form['template_path'] = [
       '#title' => t('Template definition file'),
       '#type' => 'textfield',
       '#default_value' => $config['template_path'],
       '#description' => t('Path to the javascript file defining the templates, relative to drupal root (starting with "/"). By default, it looks in your default theme directory for a file named "templates/ckeditor_templates.js"'),
-    );
+    ];
 
-    $form['replace_content'] = array(
+    $form['replace_content'] = [
       '#title' => t('Replace content default value'),
       '#type' => 'checkbox',
       '#default_value' => $config['replace_content'],
       '#description' => t('Whether the "Replace actual contents" checkbox is checked by default in the Templates dialog'),
-    );
+    ];
 
     $form['#attached']['library'][] = 'ckeditor_templates/ckeditor.templates.admin';
 
@@ -156,7 +153,7 @@ class CkeditorTemplates extends CKEditorPluginBase implements CKEditorPluginConf
    * - the default theme if the file exists
    * - the ckeditor template directory otherwise.
    *
-   * @return array<string>
+   * @return array
    *   List of path to the template file
    */
   private function getTemplatesDefaultPath() {
@@ -172,7 +169,7 @@ class CkeditorTemplates extends CKEditorPluginBase implements CKEditorPluginConf
       $defaultPath = '/' . drupal_get_path('theme', $defaultThemeName) . '/templates/ckeditor_templates.js';
     }
 
-    return array($defaultPath);
+    return [$defaultPath];
   }
 
 }
