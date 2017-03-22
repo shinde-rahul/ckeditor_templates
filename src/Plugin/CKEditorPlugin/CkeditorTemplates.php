@@ -134,6 +134,8 @@ class CkeditorTemplates extends CKEditorPluginBase implements CKEditorPluginConf
       '#description' => t('Whether the "Replace actual contents" checkbox is checked by default in the Templates dialog'),
     );
 
+    $form['#attached']['library'][] = 'ckeditor_templates/ckeditor.templates.admin';
+
     return $form;
   }
 

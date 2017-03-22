@@ -5,3 +5,8 @@ ckeditor.templates.dialog:
       css/ckeditor_templates.css: {}
   js:
     js/ckeditor_templates.dialog.js: {}
+
+ckeditor.templates.admin:
+  version: 1.x
+  js:
+    js/ckeditor_templates.admin.js: {}
