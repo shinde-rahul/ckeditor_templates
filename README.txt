@@ -24,15 +24,24 @@ Go to the format and editor config page and click configure on the format your
 want to edit : 
 http://drupalvm.dev/admin/config/content/formats
 - Add the templates button to the toolbar
-- copy the file ckeditor_templates.js.example to your theme template folder, 
-rename it without .example and customize it :
-    x edit the image_path variable to link to you thumbnail folder
-    x change the templates to you will be editing the templates array
+- copy the file ckeditor_templates.js.example from the module templates folder to your 
+theme templates folder, rename it without .example and customize it :
+    x edit the image_path variable to link to your thumbnail folder
+    x copy the standard images from the libraries/templates/templates/images folder and 
+    place them in the folder created previously (image_path).
+    x change the templates array in your custom ckeditor_templates.js to include any 
+    custom templates you want your users to have access to.
 
 That's it.
 
 If you want to place your template file in a different folder, you can set the 
 path on the Editor config page.
+
+If you have a particular setup with non standard path and your template file is not found, 
+you can always specify any custom path in the Editor Config Page, found at "Configuration",
+"Text formats and editors". Choose the editor type you want to expose the templates
+to and set path parameter at "Templates", "Templates Definition File", in the "CKEditor plugin
+settings" section.
 
 WARNING
 --------
