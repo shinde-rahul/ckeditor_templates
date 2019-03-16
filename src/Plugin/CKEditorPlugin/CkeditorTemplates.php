@@ -158,7 +158,7 @@ class CkeditorTemplates extends CKEditorPluginBase implements CKEditorPluginConf
    */
   private function getTemplatesDefaultPath() {
     // Default to module folder.
-    $defaultPath = '/' . $this->getTemplatesPluginPath() . '/templates/default.js';
+    $defaultPath = base_path() . $this->getTemplatesPluginPath() . '/templates/default.js';
 
     // Get site default theme name.
     $defaultThemConfig = $this->configFactoryService->get('system.theme');
@@ -166,7 +166,7 @@ class CkeditorTemplates extends CKEditorPluginBase implements CKEditorPluginConf
 
     $defaultThemeFileAbsolutePath = DRUPAL_ROOT . '/' . drupal_get_path('theme', $defaultThemeName) . '/templates/ckeditor_templates.js';
     if (file_exists($defaultThemeFileAbsolutePath)) {
-      $defaultPath = '/' . drupal_get_path('theme', $defaultThemeName) . '/templates/ckeditor_templates.js';
+      $defaultPath = base_path() . drupal_get_path('theme', $defaultThemeName) . '/templates/ckeditor_templates.js';
     }
 
     return [$defaultPath];

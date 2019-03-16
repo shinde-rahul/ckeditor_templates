@@ -1,9 +1,9 @@
-
 // Override the default template set
 CKEDITOR.addTemplates( 'default', {
 	// The name of sub folder which hold the shortcut preview images of the
-	// templates.
-	imagesPath: '/themes/custom/mytheme/images/ckeditor/',
+	// templates.  Determine base path of drupal installation if any
+	// (ckeditor could possibly be loaded w/o drupalSettings).
+	imagesPath: ((drupalSettings && drupalSettings.path) ? drupalSettings.path.baseUrl : '/') + 'themes/custom/mytheme/images/ckeditor/',
 
 	// The templates definitions.
 	templates: [ {
