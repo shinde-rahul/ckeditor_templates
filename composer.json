@@ -17,15 +17,16 @@
         "drupal/ckeditor": "*",
         "drupal/libraries": "*",
         "composer/installers": "~1.0",
-        "ckeditor-plugin/ckeditor_templates": "*"
+        "ckeditor-plugin/templates": "*"
     },
     "repositories": [
         {
             "type": "package",
             "package": {
-                "name": "ckeditor-plugin/ckeditor_templates",
+                "name": "ckeditor-plugin/templates",
                 "version": "4.14.1",
                 "type": "drupal-library",
+                "vendor": "ckeditor-plugin",
                 "dist": {
                     "url": "https://download.ckeditor.com/templates/releases/templates_4.14.1.zip",
                     "type": "zip"
